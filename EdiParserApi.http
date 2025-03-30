@@ -1,0 +1,6 @@
+@EdiParserApi_HostAddress = http://localhost:5260
+
+GET {{EdiParserApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
