@@ -1,4 +1,5 @@
 // Data/EdiContext.cs
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 public class EdiContext : DbContext
@@ -14,7 +15,8 @@ public class EdiContext : DbContext
         modelBuilder.Entity<EdiSegment>()
             .Property(e => e.Elements)
             .HasConversion(
-                v => JsonSerializer.Serialize(v, null),
-                v => JsonSerializer.Deserialize<string[]>(v, null));
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<string[]>(v, (JsonSerializerOptions)null));
+                
     }
 }
