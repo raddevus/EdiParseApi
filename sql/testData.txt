@@ -1,0 +1,11 @@
+var fd = new FormData();
+var fd = new FormData();
+fd.append("ediContent", "ISA*00* *00* *01*007941529 *ZZ*937429ENJI *200601*1443*U*00401*000000459*0*P*<✅GS*FA*007941529*937429ENJI*20200601*1443*301*X*004010 ✅ST*997*0301 AK1*SH*1513 AK9*A*1*1*1 SE*4*0301 GE*1*301 IEA*1*000000459");
+fetch ("http://localhost:5260/api/Edi/process",{
+    method:'POST',
+     body:fd, 
+})
+.then(response => response.json())
+  .then(data => console.log(data));
+
+  

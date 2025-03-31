@@ -8,7 +8,7 @@ public class EdiParser : IEdiParser
         if (string.IsNullOrWhiteSpace(ediContent))
             return segments;
 
-        var lines = ediContent.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        var lines = ediContent.Split(new[] { '\u2705', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         
         foreach (var line in lines)
         {
