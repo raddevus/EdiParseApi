@@ -15,16 +15,22 @@ public class EdiController : ControllerBase
     }
 
     [HttpPost("process")]
-    public async Task<IActionResult> ProcessEdi([FromForm] string ediContent)
+    public async Task<IActionResult> ProcessEdi([FromForm] string filename, [FromForm] string ediContent)
     {
         try
         {
             var segments = await _ediParser.ParseEdiAsync(ediContent);
             // await _ediRepository.SaveSegmentsAsync(segments);
+            EdiDocumentContext edc = new();
+            var ediDoc = new EdiDocument(filename);
+            edc.Add(ediDoc);
+            edc.SaveChanges();
+
+
             EdiSegmentContext esc = new();
             foreach (var segment in segments)
             {
-                
+                segment.DocumentId = ediDoc.Id;
                 Console.WriteLine($"Segment: {segment.Name}");
                 string[] elementNames = EdiParser.ElementNames.ContainsKey(segment.Name) ? EdiParser.ElementNames[segment.Name] : null;
                 for (int i = 0; i < segment.Elements.Count; i++)
@@ -36,7 +42,7 @@ public class EdiController : ControllerBase
                 esc.SaveChanges();
                 
             }
-
+            
             return Ok(new { Message = $"Processed {segments.Count} segments" });
         }
         catch (Exception ex)

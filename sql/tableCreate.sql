@@ -8,6 +8,7 @@ CREATE TABLE EdiSegments (
 
 CREATE TABLE EdiSegment (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    DocumentId INTEGER,
     Name TEXT
 );
 
@@ -17,4 +18,11 @@ CREATE TABLE EdiElement (
     Name TEXT,
     Value TEXT
 );
+
+CREATE TABLE EdiDocument (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    FileName TEXT,
+    [FileCreated] NVARCHAR(30) check(length(FileCreated) <= 30)
+);
+
 
