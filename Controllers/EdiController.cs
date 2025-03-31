@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 public class EdiController : ControllerBase
 {
     private readonly IEdiParser _ediParser;
-    private readonly IEdiRepository _ediRepository;
+    //private readonly IEdiRepository _ediRepository;
 
-    public EdiController(IEdiParser ediParser, IEdiRepository ediRepository)
+    public EdiController(IEdiParser ediParser)//, IEdiRepository ediRepository)
     {
         _ediParser = ediParser;
-        _ediRepository = ediRepository;
+      //  _ediRepository = ediRepository;
     }
 
     [HttpPost("process")]
@@ -20,7 +20,19 @@ public class EdiController : ControllerBase
         try
         {
             var segments = await _ediParser.ParseEdiAsync(ediContent);
-            await _ediRepository.SaveSegmentsAsync(segments);
+            // await _ediRepository.SaveSegmentsAsync(segments);
+
+            foreach (var segment in segments)
+        {
+            Console.WriteLine($"Segment: {segment.Name}");
+            string[] elementNames = EdiParser.ElementNames.ContainsKey(segment.Name) ? EdiParser.ElementNames[segment.Name] : null;
+            for (int i = 0; i < segment.Elements.Count; i++)
+            {
+                string elementName = elementNames != null && i < elementNames.Length ? elementNames[i] : $"Element {i + 1}";
+                Console.WriteLine($" - {elementName}: {segment.Elements[i].Value}");
+            }
+        }
+
             return Ok(new { Message = $"Processed {segments.Count} segments" });
         }
         catch (Exception ex)

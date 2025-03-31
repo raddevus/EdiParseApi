@@ -1,7 +1,7 @@
 // Services/EdiParser.cs
 public class EdiParser : IEdiParser
 {
-    private static readonly Dictionary<string, string[]> ElementNames = new Dictionary<string, string[]>();
+    public static readonly Dictionary<string, string[]> ElementNames = new Dictionary<string, string[]>();
 
     public EdiParser(){
         InitializeElementNames();
@@ -9,7 +9,7 @@ public class EdiParser : IEdiParser
     public async Task<List<EdiSegment>> ParseEdiAsync(string ediData)
     {
         var segments = new List<EdiSegment>();
-        string[] lines = ediData.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = ediData.Split(new[] { '\n' , '\u2705'}, StringSplitOptions.RemoveEmptyEntries);
 
         foreach (var line in lines)
         {
@@ -34,7 +34,7 @@ public class EdiParser : IEdiParser
     {
         ElementNames["ISA"] = new[] { "Authorization Info Qualifier", "Authorization Info", "Security Info Qualifier", "Security Info", "Interchange ID Qualifier", "Interchange Sender ID", "Interchange ID Qualifier", "Interchange Receiver ID", "Date", "Time", "Repetition Separator", "Control Version Number", "Control Number", "Acknowledgment Requested", "Usage Indicator", "Component Element Separator" };
         ElementNames["GS"] = new[] { "Functional ID Code", "Application Sender Code", "Application Receiver Code", "Date", "Time", "Group Control Number", "Responsible Agency Code", "Version/Release" };
-        ElementNames["ST"] = new[] { "Transaction Set Identifier Code", "Transaction Set Control Number" };
+        ElementNames["ST"] = new[] { "Transaction Set Identifier Code", "Transaction Set Control Number"};
         ElementNames["BIG"] = new[] { "Invoice Date", "Invoice Number", "Purchase Order Date", "Purchase Order Number", "Release Number", "Invoice Type Code", "Invoice Reason Code" };
         ElementNames["REF"] = new[] { "Reference Identification Qualifier", "Reference Identification" };
         ElementNames["N1"] = new[] { "Entity Identifier Code", "Name", "Identification Code Qualifier", "Identification Code" };
