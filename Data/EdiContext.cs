@@ -12,11 +12,11 @@ public class EdiContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<EdiSegment>()
-            .Property(e => e.Elements)
-            .HasConversion(
-                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                v => JsonSerializer.Deserialize<string[]>(v, (JsonSerializerOptions)null));
+        // modelBuilder.Entity<EdiSegment>()
+        //     .Property(e => e.Elements)
+        //     .HasConversion(
+        //         v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null)
+        //         v => JsonSerializer.Deserialize<List<EdiSegment>(v, (JsonSerializerOptions)null));
                 
     }
 }

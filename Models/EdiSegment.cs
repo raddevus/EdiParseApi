@@ -2,7 +2,6 @@
 public class EdiSegment
 {
     public int Id { get; set; }
-    public string SegmentIdentifier { get; set; }
-    public string[] Elements { get; set; }
-    public DateTime ProcessedDate { get; set; }
+    public string Name{get;set;}
+    public List<EdiElement> Elements { get; set; }
 }

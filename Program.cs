@@ -16,10 +16,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddMvc(x => x.EnableEndpointRouting = false);
 
-builder.Services.AddDbContext<EdiContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IEdiParser, EdiParser>();
-builder.Services.AddScoped<IEdiRepository, EdiRepository>();
+//builder.Services.AddScoped<IEdiRepository, EdiRepository>();
 var app = builder.Build();
 app.UseCors();
 app.UseMvc();
