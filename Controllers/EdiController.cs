@@ -33,14 +33,20 @@ public class EdiController : ControllerBase
                 segment.DocumentId = ediDoc.Id;
                 Console.WriteLine($"Segment: {segment.Name}");
                 string[] elementNames = EdiParser.ElementNames.ContainsKey(segment.Name) ? EdiParser.ElementNames[segment.Name] : null;
+                EdiElementContext eec = new ();
+                esc.Add(segment);
+                esc.SaveChanges();
                 for (int i = 0; i < segment.Elements.Count; i++)
                 {
                     string elementName = elementNames != null && i < elementNames.Length ? elementNames[i] : $"Element {i + 1}";
+                    EdiElement ediEl = new();
+                    ediEl.Name = elementName;
+                    ediEl.Value = segment.Elements[i].Value;
+                    ediEl.SegmentId = segment.Id;
+                    eec.Add(ediEl);
+                    eec.SaveChanges();
                     Console.WriteLine($" - {elementName}: {segment.Elements[i].Value}");
                 }
-                esc.Add(segment);
-                esc.SaveChanges();
-                
             }
             
             return Ok(new { Message = $"Processed {segments.Count} segments" });
