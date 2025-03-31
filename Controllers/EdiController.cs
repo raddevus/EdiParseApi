@@ -21,17 +21,21 @@ public class EdiController : ControllerBase
         {
             var segments = await _ediParser.ParseEdiAsync(ediContent);
             // await _ediRepository.SaveSegmentsAsync(segments);
-
+            EdiSegmentContext esc = new();
             foreach (var segment in segments)
-        {
-            Console.WriteLine($"Segment: {segment.Name}");
-            string[] elementNames = EdiParser.ElementNames.ContainsKey(segment.Name) ? EdiParser.ElementNames[segment.Name] : null;
-            for (int i = 0; i < segment.Elements.Count; i++)
             {
-                string elementName = elementNames != null && i < elementNames.Length ? elementNames[i] : $"Element {i + 1}";
-                Console.WriteLine($" - {elementName}: {segment.Elements[i].Value}");
+                
+                Console.WriteLine($"Segment: {segment.Name}");
+                string[] elementNames = EdiParser.ElementNames.ContainsKey(segment.Name) ? EdiParser.ElementNames[segment.Name] : null;
+                for (int i = 0; i < segment.Elements.Count; i++)
+                {
+                    string elementName = elementNames != null && i < elementNames.Length ? elementNames[i] : $"Element {i + 1}";
+                    Console.WriteLine($" - {elementName}: {segment.Elements[i].Value}");
+                }
+                esc.Add(segment);
+                esc.SaveChanges();
+                
             }
-        }
 
             return Ok(new { Message = $"Processed {segments.Count} segments" });
         }
