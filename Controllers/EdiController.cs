@@ -15,7 +15,7 @@ public class EdiController : ControllerBase
     }
 
     [HttpPost("process")]
-    public async Task<IActionResult> ProcessEdi([FromBody] string ediContent)
+    public async Task<IActionResult> ProcessEdi([FromForm] string ediContent)
     {
         try
         {

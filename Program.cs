@@ -1,5 +1,11 @@
 using Microsoft.EntityFrameworkCore; 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -8,12 +14,15 @@ builder.Services.AddSwaggerGen();
 
 // Add services to the container
 builder.Services.AddControllers();
+builder.Services.AddMvc(x => x.EnableEndpointRouting = false);
 
 builder.Services.AddDbContext<EdiContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IEdiParser, EdiParser>();
 builder.Services.AddScoped<IEdiRepository, EdiRepository>();
 var app = builder.Build();
+app.UseCors();
+app.UseMvc();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -21,7 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 var summaries = new[]
 {
