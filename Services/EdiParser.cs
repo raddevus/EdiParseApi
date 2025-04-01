@@ -6,7 +6,7 @@ public class EdiParser : IEdiParser
     public EdiParser(){
         InitializeElementNames();
     }
-    public async Task<List<EdiSegment>> ParseEdiAsync(string ediData)
+    public async Task<List<EdiSegment>> ParseEdiAsync(string ediData, bool onlyParseIsa = false)
     {
         var segments = new List<EdiSegment>();
         string[] lines = ediData.Split(new[] { '\n' , '\u2705'}, StringSplitOptions.RemoveEmptyEntries);
@@ -26,10 +26,14 @@ public class EdiParser : IEdiParser
                 }
                 segments.Add(segment);
             }
+            if (onlyParseIsa){
+                break;
+            }
         }
         
         return await Task.FromResult(segments);
     }
+    
     private void InitializeElementNames()
     {
         ElementNames["ISA"] = new[] { "Authorization Info Qualifier", "Authorization Info", "Security Info Qualifier", "Security Info", "Interchange ID Qualifier", "Interchange Sender ID", "Interchange ID Qualifier", "Interchange Receiver ID", "Date", "Time", "Repetition Separator", "Control Version Number", "Control Number", "Acknowledgment Requested", "Usage Indicator", "Component Element Separator" };

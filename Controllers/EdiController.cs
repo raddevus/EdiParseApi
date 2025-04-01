@@ -20,7 +20,7 @@ public class EdiController : ControllerBase
         try
         {
             var segments = await _ediParser.ParseEdiAsync(ediContent);
-            // await _ediRepository.SaveSegmentsAsync(segments);
+            
             EdiDocumentContext edc = new();
             var ediDoc = new EdiDocument(filename);
             edc.Add(ediDoc);
@@ -56,4 +56,30 @@ public class EdiController : ControllerBase
             return StatusCode(500, new { Error = "Failed to process EDI", Details = ex.Message });
         }
     }
+
+    [HttpPost("parseisa")]
+    public async Task<IActionResult> ParseIsa([FromForm] string filename, [FromForm] string ediContent)
+    {
+        try
+        {
+            
+            var segments = await _ediParser.ParseEdiAsync(ediContent,true);
+            
+            foreach (var segment in segments)
+            {
+                for (int i = 0; i < segment.Elements.Count; i++)
+                {
+                    string elementName = "ISA";
+                    Console.WriteLine($" - {segment.Elements[i].Name}: {segment.Elements[i].Value}");
+                }
+            }
+            
+            return Ok(new { Message = $"Processed {segments.Count} segments" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Error = "Failed to process EDI", Details = ex.Message });
+        }
+    }
+
 }
