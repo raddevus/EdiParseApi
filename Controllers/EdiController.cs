@@ -62,11 +62,17 @@ public class EdiController : ControllerBase
     {
         try
         {
-            
             var segments = await _ediParser.ParseEdiAsync(ediContent,true);
+            EdiDocumentContext edc = new();
+            var ediDoc = new EdiDocument(filename);
+            edc.Add(ediDoc);
+            edc.SaveChanges();
             
-            foreach (var segment in segments)
+            if (segments.Count > 0)
             {
+                var segment = segments[0];
+                segment.DocumentId = ediDoc.Id;
+                StoreIsaHeader(segment);
                 for (int i = 0; i < segment.Elements.Count; i++)
                 {
                     string elementName = "ISA";
@@ -80,6 +86,34 @@ public class EdiController : ControllerBase
         {
             return StatusCode(500, new { Error = "Failed to process EDI", Details = ex.Message });
         }
+    }
+
+    private bool StoreIsaHeader(EdiSegment isaHeader){
+        
+        IsaHeader header = new();
+        header.DocumentId = isaHeader.DocumentId;
+        header.AuthInfoQualifier = isaHeader.Elements[0].Value.Trim();
+        header.AuthInfo = isaHeader.Elements[1].Value.Trim();
+        header.SecurityInfoQualifier = isaHeader.Elements[2].Value.Trim();
+        header.SecurityInfo = isaHeader.Elements[3].Value.Trim();
+        header.SenderQualifier = isaHeader.Elements[4].Value.Trim();
+        header.SenderId = isaHeader.Elements[5].Value.Trim();
+        header.ReceiverQualifier = isaHeader.Elements[6].Value.Trim();
+        header.ReceiverId = isaHeader.Elements[7].Value.Trim();        
+        header.IsaDate = isaHeader.Elements[8].Value.Trim();
+        header.IsaTime = isaHeader.Elements[9].Value.Trim();
+        header.RepetitionSeparator = Convert.ToChar(isaHeader.Elements[10].Value.Trim());
+        header.ControlVersionNumber = isaHeader.Elements[11].Value.Trim();
+        header.ControlNumber = isaHeader.Elements[12].Value.Trim();
+        header.AckRequested = Convert.ToBoolean(Convert.ToInt16(isaHeader.Elements[13].Value.Trim()));
+        header.UsageIndicator = Convert.ToChar(isaHeader.Elements[14].Value.Trim());
+        header.ComponentElementSeparator = Convert.ToChar(isaHeader.Elements[15].Value.Trim());
+
+        IsaHeaderContext ihc = new();
+        
+        ihc.Add(header);
+        ihc.SaveChanges();
+        return true;
     }
 
 }
