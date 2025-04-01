@@ -50,7 +50,8 @@ public class IsaHeaderContext : DbContext
             ControlNumber NVARCHAR(9) check(length(ControlNumber) <= 9),
             AckRequested BOOLEAN,
             UsageIndicator NVARCHAR(1) check(length(UsageIndicator) <= 1),
-            ComponentElementSeparator  NVARCHAR(1) check(length(ComponentElementSeparator) <= 1)
+            ComponentElementSeparator  NVARCHAR(1) check(length(ComponentElementSeparator) <= 1),
+            [Created] NVARCHAR(30) default (datetime('now','localtime')) check(length(Created) <= 30)
         );"
     };
 
