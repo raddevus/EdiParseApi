@@ -28,6 +28,7 @@ CREATE TABLE EdiDocument (
 // MAX LENGTH of a ISA HEADER is 106 chars
 CREATE TABLE IsaHeader (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    DocumentId INTEGER,
     AuthInfoQualifier NVARCHAR(2) check(length(AuthInfoQualifier) <= 2), 
     AuthInfo NVARCHAR(10) check(length(AuthInfoQualifier) <= 10), 
     SecurityInfoQualifier NVARCHAR(2) check(length(SecurityInfoQualifier) <= 2), 

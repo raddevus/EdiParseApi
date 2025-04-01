@@ -7,6 +7,8 @@ public class IsaHeader
 
     // MAX LENGTH of a ISA HEADER is 106 chars
     public int Id { get; set; }
+
+    public int DocumentId {get;set;}
     public string AuthInfoQualifier{get;set;} // two chars max (02 & 03 are possible)
     public string AuthInfo{get;set;}
     public string SecurityInfoQualifier{get;set;} // two chars (00 & 01 are possible)
